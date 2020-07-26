@@ -1,4 +1,4 @@
-#!/usr/bin/python3.8
+#!/usr/bin/python3.8git
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
@@ -12,7 +12,7 @@ WEBHOOK_SSL_CERT = "/etc/letsencrypt/live/YOUR.DOMAIN/fullchain.pem"
 WEBHOOK_SSL_PRIV = "/etc/letsencrypt/live/YOUR.DOMAIN/privkey.pem"
 
 API_TOKEN = '968634485:AAER3wucMp_6YWYac_tnqSqtoGSV8V_4fMw'
-bot = telebot.TeleBot(API_TOKEN)
+bot = TeleBot(API_TOKEN)
 
 app = web.Application()
 
