@@ -1,10 +1,6 @@
-#!/usr/bin/python3.8
-# -*- coding: utf-8 -*-
-
 from bs4 import BeautifulSoup
-import requests, datetime, re, json, os, time, sys
+import requests, datetime, re, json
 import telebot
-from flask import Flask
 import config
 
 #bot = telebot.TeleBot(API_TOKEN)
