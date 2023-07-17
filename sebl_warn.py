@@ -30,6 +30,7 @@ looking_area = 'Сокулукский'
 template_area = 'ский$'
 town = 'Манас'
 #street = 'Авиагородок'
+found = False
 noted = {}
 noted_filename = 'noted.json'
 shows = 0
@@ -78,18 +79,20 @@ for blackout in blackout_list:
                         shows = noted[str(every_day)]
                     for street in streets:
                         found_town_street = re.search(rf'{town} *\([^(]*{street}[^)]*\)', cell.text)
-                        if  (re.search(rf'{town} *\([^(]*{street}[^)]*\)', cell.text)) and (looking_area == current_area) and (
-                                shows < shows_limit):
-                            output_string = str('<a href="' + date_url + '">В списке профилактических работ Северэлектро на{} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
-                                findtoday, current_area, found_town_street.group(), **time_interval))
-                            for id in ids:
-                               telegram_bot_sendtext(id, output_string)
-#                            print(output_string)
-                            if str(every_day) in noted:
-                                noted[str(every_day)] += 1
-                            else:
-                                noted[str(every_day)] = 1
-                            break
+                        if  (re.search(rf'{town} *\([^(]*{street}[^)]*\)', cell.text)) and (looking_area == current_area):
+                            found = True
+                            if (found) and (shows < shows_limit):
+                                output_string = str('<a href="' + date_url + '">В списке профилактических работ Северэлектро на{} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
+                                    findtoday, current_area, found_town_street.group(), **time_interval))
+                                for id in ids:
+#                                   telegram_bot_sendtext(id, output_string)
+                                    print(output_string)
+                            
+            if (found):
+                if (str(every_day) in noted):
+                    noted[str(every_day)] += 1
+                else:
+                    noted[str(every_day)] = 1
 
 for key in list(noted):
     if datetime.datetime.strptime(str(key), '%Y-%m-%d').date() < datetime.date.today():
