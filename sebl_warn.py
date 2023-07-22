@@ -19,7 +19,7 @@ def daterange(start_date, end_date):
 ids = ['143151797', '1111185', '-1001909756834']
 months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-streets = ['Авиагородок', 'Школьная', 'Авиогородок', 'Манас']
+streets = ['Авиагородок', 'Авиогородок']#, 'Манас', 'Школьная']
 url = 'https://www.severelectro.kg'
 path = '/content/article/69-planovye-otklyucheniya'
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0'}
