@@ -34,7 +34,7 @@ found = False
 noted = {}
 noted_filename = 'noted.json'
 shows = 0
-shows_limit = 2
+shows_limit = 1
 day_start_delta = 1
 split_day_time = datetime.time(12, 00)
 
