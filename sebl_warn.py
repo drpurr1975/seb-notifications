@@ -16,7 +16,7 @@ def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
-ids = ['143151797']
+ids = ['1111185']
 #ids = ['143151797', '1111185', '-1001909756834']
 months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
@@ -52,17 +52,19 @@ if datetime.datetime.now().time() < split_day_time:
 r = requests.get(url + path, timeout=20, headers=headers)
 soup_bol = BeautifulSoup(r.text, features='html.parser')
 
-blackout_list = soup_bol.find_all(class_='post-title')
+#blackout_list = soup_bol.find_all(class_='post-title')
+blackout_list = soup_bol.find_all(class_='block-paragraph_block')
+
 day_today = datetime.date.today()
 for blackout in blackout_list:
     for every_day in daterange(day_today + datetime.timedelta(days=day_start_delta),
                                day_today + datetime.timedelta(days=4)):
-        bo_announce = blackout.contents[1].contents[0]
+        bo_announce = blackout.contents[0].contents[0].contents[0].contents[0]
 #        findtoday_alt = ' ' + str(every_day.day).zfill(2) + ' ' + months[every_day.month - 1]
 #        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
         findtoday = every_day.strftime('%d.%m.%Y')
         if (bo_announce.find(findtoday) > -1):
-            date_url = url + blackout.contents[1].get('href')
+            date_url = url + blackout.contents[0].contents[0].get('href')
             bo_r = requests.get(date_url, timeout=20, headers=headers)
             soup_bo = BeautifulSoup(bo_r.text, features='html.parser')
 
@@ -84,7 +86,7 @@ for blackout in blackout_list:
                         if  (re.search(rf'(?i){town} *\([^(]*{street}[^)]*\)', cell.text)) and (looking_area == current_area):
                             found = True
                             if (found) and (shows < shows_limit):
-                                output_string = str('<a href="' + date_url + '">В списке профилактических работ Северэлектро на{} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
+                                output_string = str('<a href="' + date_url + '">В списке профилактических работ Северэлектро на {} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
                                     findtoday, current_area, found_town_street.group(), **time_interval))
                                 for id in ids:
                                    telegram_bot_sendtext(id, output_string)
