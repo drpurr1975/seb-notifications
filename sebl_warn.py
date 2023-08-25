@@ -16,12 +16,13 @@ def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
-ids = ['143151797', '1111185', '-1001909756834']
+ids = ['143151797']
+#ids = ['143151797', '1111185', '-1001909756834']
 months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 streets = ['Авиагородок', 'Авиогородок']#, 'Манас', 'Школьная']
-url = 'https://www.severelectro.kg'
-path = '/content/article/69-planovye-otklyucheniya'
+url = 'http://chupes.nesk.kg'
+path = '/ru/abonentam/perechen-uchastkov-rabot'
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0'}
 time_template = '^\d{1,2}[-:]\d{2}'
 time_interval = {'start': '', 'end': ''}
@@ -57,9 +58,10 @@ for blackout in blackout_list:
     for every_day in daterange(day_today + datetime.timedelta(days=day_start_delta),
                                day_today + datetime.timedelta(days=4)):
         bo_announce = blackout.contents[1].contents[0]
-        findtoday_alt = ' ' + str(every_day.day).zfill(2) + ' ' + months[every_day.month - 1]
-        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
-        if (bo_announce.find(findtoday) > -1 or bo_announce.find(findtoday_alt) > -1) and bo_announce.find(looking_region) > -1:
+#        findtoday_alt = ' ' + str(every_day.day).zfill(2) + ' ' + months[every_day.month - 1]
+#        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
+        findtoday = every_day.strftime('%d.%m.%Y')
+        if (bo_announce.find(findtoday) > -1):
             date_url = url + blackout.contents[1].get('href')
             bo_r = requests.get(date_url, timeout=20, headers=headers)
             soup_bo = BeautifulSoup(bo_r.text, features='html.parser')
