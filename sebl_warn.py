@@ -16,8 +16,8 @@ def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
-ids = ['1111185']
-#ids = ['143151797', '1111185', '-1001909756834']
+#ids = ['1111185'] #test receivers list
+ids = ['143151797', '1111185', '-1001909756834'] #all receivers
 months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 streets = ['Авиагородок', 'Авиогородок']#, 'Манас', 'Школьная']
