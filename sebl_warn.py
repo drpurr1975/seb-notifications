@@ -20,7 +20,7 @@ def daterange(start_date, end_date):
 ids = ['143151797', '1111185', '-1001909756834'] #all receivers
 months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-streets = ['Авиагородок', 'Авиогородок',]# 'Манас', 'Школьная']
+streets = ['Авиагородок', 'Авиогородок']#, 'Пушкина', 'Манас', 'Школьная']
 url = 'http://chupes.nesk.kg'
 #path = '/ru/abonentam/perechen-uchastkov-rabot'
 path = '/ru/abonentam/informaciya-ob-otklyucheniyah/'
@@ -103,8 +103,8 @@ for row in rows[2:]:
             if  (re.search(rf'(?i){town} *\([^(]*{street}[^)]*\)', cell.text)) and (looking_area == current_area):
                 found = True
                 if (found) and (shows < shows_limit):
-                    output_string = str('<a href="' + url + path + '">В списке профилактических работ ЧуПЭС{}найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
-                        date_str_out, current_area, found_town_street.group(), **time_interval))
+                    output_string = str('<a href="' + url + path + '">В списке профилактических работ ЧуПЭС {} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
+                        date_str_out.strip(), current_area, found_town_street.group(), **time_interval))
                     for id in ids:
                         telegram_bot_sendtext(id, output_string)
 #                        print(output_string)
