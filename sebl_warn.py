@@ -22,7 +22,8 @@ months = ['января', 'февраля', 'марта', 'апреля', 'ма�
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 streets = ['Авиагородок', 'Авиогородок']#, 'Манас', 'Школьная']
 url = 'http://chupes.nesk.kg'
-path = '/ru/abonentam/perechen-uchastkov-rabot'
+#path = '/ru/abonentam/perechen-uchastkov-rabot'
+path = '/ru/abonentam/informaciya-ob-otklyucheniyah/'
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0'}
 time_template = '^\d{1,2}[-:]\d{2}'
 time_interval = {'start': '', 'end': ''}
@@ -49,10 +50,12 @@ except:
 if datetime.datetime.now().time() < split_day_time:
     day_start_delta = 0
 
-r = requests.get(url + path, timeout=20, headers=headers)
-soup_bol = BeautifulSoup(r.text, features='html.parser')
-
-#blackout_list = soup_bol.find_all(class_='post-title')
+#r = requests.get(url + path, timeout=20, headers=headers)
+#soup_bol = BeautifulSoup(r.text, features='html.parser')
+bo_r = requests.get(url + path, timeout=20, headers=headers)
+soup_bo = BeautifulSoup(r.text, features='html.parser')
+'''
+blackout_list = soup_bol.find_all(class_='post-title')
 blackout_list = soup_bol.find_all(class_='block-paragraph_block')
 
 day_today = datetime.date.today()
@@ -60,43 +63,46 @@ for blackout in blackout_list:
     for every_day in daterange(day_today + datetime.timedelta(days=day_start_delta),
                                day_today + datetime.timedelta(days=4)):
         bo_announce = blackout.contents[0].contents[0].contents[0].contents[0]
-#        findtoday_alt = ' ' + str(every_day.day).zfill(2) + ' ' + months[every_day.month - 1]
-#        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
+        findtoday_alt = ' ' + str(every_day.day).zfill(2) + ' ' + months[every_day.month - 1]
+        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
         findtoday = every_day.strftime('%d.%m.%Y')
         if (bo_announce.find(findtoday) > -1):
             date_url = url + blackout.contents[0].contents[0].get('href')
             bo_r = requests.get(date_url, timeout=20, headers=headers)
             soup_bo = BeautifulSoup(bo_r.text, features='html.parser')
+'''
+header_list = soup_bo.find_all('h3')
+date_str = 
 
-            rows = soup_bo.find_all('tr')
-            for row in rows[2:]:
-                cells = row.find_all('td')
-                for cell in cells:
-                    if re.search(template_area, cell.get_text().strip()):
-                        current_area = cell.get_text().strip()
-                    if re.search(time_template, cell.get_text().strip()):
-                        time_interval['start'] = cell.get_text().strip()
-                        time_interval['end'] = cell.next_sibling.next_sibling.get_text().strip()
-                        break
-                for cell in cells:
-                    if str(every_day) in noted:
-                        shows = noted[str(every_day)]
-                    for street in streets:
-                        found_town_street = re.search(rf'(?i){town} *\([^(]*{street}[^)]*\)', cell.text)
-                        if  (re.search(rf'(?i){town} *\([^(]*{street}[^)]*\)', cell.text)) and (looking_area == current_area):
-                            found = True
-                            if (found) and (shows < shows_limit):
-                                output_string = str('<a href="' + date_url + '">В списке профилактических работ Северэлектро на {} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
-                                    findtoday, current_area, found_town_street.group(), **time_interval))
-                                for id in ids:
-                                   telegram_bot_sendtext(id, output_string)
-#                                    print(output_string)
-                            
-            if (found):
-                if (str(every_day) in noted):
-                    noted[str(every_day)] += 1
-                else:
-                    noted[str(every_day)] = 1
+rows = soup_bo.find_all('tr')
+for row in rows[2:]:
+    cells = row.find_all('td')
+    for cell in cells:
+        if re.search(template_area, cell.get_text().strip()):
+            current_area = cell.get_text().strip()
+        if re.search(time_template, cell.get_text().strip()):
+            time_interval['start'] = cell.get_text().strip()
+            time_interval['end'] = cell.next_sibling.next_sibling.get_text().strip()
+            break
+    for cell in cells:
+        if str(every_day) in noted:
+            shows = noted[str(every_day)]
+        for street in streets:
+            found_town_street = re.search(rf'(?i){town} *\([^(]*{street}[^)]*\)', cell.text)
+            if  (re.search(rf'(?i){town} *\([^(]*{street}[^)]*\)', cell.text)) and (looking_area == current_area):
+                found = True
+                if (found) and (shows < shows_limit):
+                    output_string = str('<a href="' + date_url + '">В списке профилактических работ Северэлектро на {} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
+                        findtoday, current_area, found_town_street.group(), **time_interval))
+                    for id in ids:
+#                                   telegram_bot_sendtext(id, output_string)
+                        print(output_string)
+                
+if (found):
+    if (str(every_day) in noted):
+        noted[str(every_day)] += 1
+    else:
+        noted[str(every_day)] = 1
 
 for key in list(noted):
     if datetime.datetime.strptime(str(key), '%Y-%m-%d').date() < datetime.date.today():
