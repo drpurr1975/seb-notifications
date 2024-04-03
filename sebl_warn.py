@@ -17,10 +17,10 @@ def daterange(start_date, end_date):
         yield start_date + datetime.timedelta(n)
 
 #ids = ['1111185'] #test receivers list
-ids = ['143151797', '1111185', '-1001909756834'] #all receivers
+ids = ['143151797', '1111185'}#, '-1001909756834'] #all receivers
 months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-streets = ['Авиагородок', 'Авиогородок']#, 'Пушкина', 'Манас', 'Школьная']
+streets = ['Авиагородок', 'Авиогородок', 'Пушкина', 'Манас', 'Школьная']
 url = 'http://chupes.nesk.kg'
 #path = '/ru/abonentam/perechen-uchastkov-rabot'
 path = '/ru/abonentam/informaciya-ob-otklyucheniyah/'
@@ -107,8 +107,8 @@ for row in rows[2:]:
                     output_string = str('<a href="' + url + path + '">В списке профилактических работ ЧуПЭС {} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
                         date_str_out.strip(), current_area, found_town_street.group(), **time_interval))
                     for id in ids:
-#                        telegram_bot_sendtext(id, output_string)
-                        print(output_string)
+                        telegram_bot_sendtext(id, output_string)
+#                        print(output_string)
                 
 if (found):
     if (str(every_day) in noted):
