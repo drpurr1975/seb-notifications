@@ -116,7 +116,7 @@ for row in rows[2:]:
                     for id in ids:
                         telegram_bot_sendtext(id, output_string)
 #                        print(output_string)
-                
+
 if found_bo:
     if str(every_day) in noted:
         noted[str(every_day)] += 1
