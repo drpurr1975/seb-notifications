@@ -114,8 +114,8 @@ for row in rows[2:]:
                     output_string = str('<a href="' + bo_list_url + '">В списке профилактических работ Северэлектро на{} найдено &quot;{}, {}&quot;, отключение с {start} до {end}</a>'.format(
                         findtoday, current_area, found_town_street.group(), **time_interval))
                     for id in ids:
-#                        telegram_bot_sendtext(id, output_string)
-                        print(output_string)
+                        telegram_bot_sendtext(id, output_string)
+#                        print(output_string)
                 
 if found_bo:
     if str(every_day) in noted:
