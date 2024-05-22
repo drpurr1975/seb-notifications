@@ -59,10 +59,13 @@ day_today = datetime.date.today()
 for blackout in blackout_list:
     for every_day in daterange(day_today + datetime.timedelta(days=day_start_delta),
                                day_today + datetime.timedelta(days=4)):
-        bo_announce = blackout.contents[0].contents[0].contents[0].contents[0]
+        try:
+            bo_announce = blackout.contents[0].contents[0].contents[0].contents[0]
+        except:
+            bo_announce = ''
 #        findtoday_alt = ' ' + str(every_day.day).zfill(2) + ' ' + months[every_day.month - 1]
-#        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
-        findtoday = every_day.strftime('%d.%m.%Y')
+        findtoday = ' ' + str(every_day.day) + ' ' + months[every_day.month - 1]
+#        findtoday = every_day.strftime('%d.%m.%Y')
         if (bo_announce.find(findtoday) > -1):
             date_url = url + blackout.contents[0].contents[0].get('href')
             bo_r = requests.get(date_url, timeout=20, headers=headers)
